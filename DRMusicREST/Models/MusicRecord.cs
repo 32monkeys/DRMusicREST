@@ -8,6 +8,8 @@
         public int Duration { get; set; } // Duration in seconds
         public int Year { get; set; }
 
+        public MusicRecord() { }
+
         public MusicRecord(string title, string artist, int duration, int year)
         {
             Id = 0;
