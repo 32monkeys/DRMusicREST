@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="DRMusicREST/DRMusicREST.csproj" />
+  <Project Path="DrMusicRESTTest/DrMusicRESTTest.csproj" />
 </Solution>
