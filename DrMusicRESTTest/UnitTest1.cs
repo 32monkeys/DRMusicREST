@@ -33,6 +33,7 @@ namespace DrMusicRESTTest
 
             //Assert
             Assert.IsType<List<MusicRecord>>(actual);
+            Assert.Equal(expected.Count, actual.Count());
         }
     }
 }
