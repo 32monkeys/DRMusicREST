@@ -24,7 +24,7 @@ namespace DRMusicREST.Repositories
             {
                 return null;
             }
-            _nextId++;
+            obj.Id = _nextId++;
             _musicRecords.Add(obj);
             return obj;
         }
