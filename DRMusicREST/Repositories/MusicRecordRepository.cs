@@ -5,23 +5,28 @@ namespace DRMusicREST.Repositories
 {
     public class MusicRecordRepository : IRepository<MusicRecord>
     {
+        private static int _nextId;
         private readonly List<MusicRecord> _musicRecords;
         public MusicRecordRepository(bool includeSampleData = true)
         {
+            _nextId = 0;
             _musicRecords = new List<MusicRecord>();
             if (includeSampleData)
             {
-                _musicRecords.AddRange(new[]
-                {
-                    new MusicRecord { Id = 1, Title = "Album 1", Artist = "Artist 1", Year = 2020, Duration = 60 },
-                    new MusicRecord { Id = 2, Title = "Album 2", Artist = "Artist 2", Year = 2021, Duration = 45 },
-                    new MusicRecord { Id = 3, Title = "Album 3", Artist = "Artist 3", Year = 2022, Duration = 50 }
-                });
+                Add(new MusicRecord("Album 1", "Artist 1", 2020, 60));
+                Add(new MusicRecord("Album 2", "Artist 2", 2021, 45));
+                Add(new MusicRecord("Album 3", "Artist 3", 2022, 50));
             }
         }
         public MusicRecord Add(MusicRecord obj)
         {
-            throw new NotImplementedException();
+            if (obj is null)
+            {
+                return null;
+            }
+            _nextId++;
+            _musicRecords.Add(obj);
+            return obj;
         }
 
         public MusicRecord Delete(MusicRecord obj)

@@ -40,8 +40,19 @@ namespace DRMusicREST.Controllers
 
         // POST api/<MusicRecordController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Post([FromBody] MusicRecord value)
         {
+            try
+            {
+                _musicRecordRepository.Add(value);
+                return Created($"api/musicrecord/{value.Id}", value);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // PUT api/<MusicRecordController>/5
