@@ -13,15 +13,22 @@ namespace DRMusicREST.Controllers
     {
         private readonly IRepository<MusicRecord> _musicRecordRepository;
 
-        public MusicRecordController(MusicRecordRepository musicRecordRepository)
+        public MusicRecordController(IRepository<MusicRecord> musicRecordRepository)
         {
             _musicRecordRepository = musicRecordRepository;
         }
         // GET: api/<MusicRecordController>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<MusicRecord>> Get()
         {
-            return new string[] { "value1", "value2" };
+            IEnumerable<MusicRecord> musicRecords = _musicRecordRepository.GetAll();
+            if (musicRecords == null)
+            {
+                return NotFound("No music records found.");
+            }
+            return Ok(musicRecords);
         }
 
         // GET api/<MusicRecordController>/5
