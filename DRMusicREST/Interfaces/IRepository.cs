@@ -6,6 +6,6 @@
         T GetById(int id);
         T Add(T obj);
         T Update(int id,T obj);
-        T Delete(T obj);
+        T Delete(int id);
     }
 }
