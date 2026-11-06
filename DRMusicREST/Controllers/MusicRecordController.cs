@@ -13,9 +13,9 @@ namespace DRMusicREST.Controllers
     {
         private readonly IRepository<MusicRecord> _musicRecordRepository;
 
-        public MusicRecordController(IRepository<MusicRecord> musicRecordRepository)
+        public MusicRecordController(IRepository<MusicRecord> musicRecordDbRepo)
         {
-            _musicRecordRepository = musicRecordRepository;
+            _musicRecordRepository = musicRecordDbRepo;
         }
         // GET: api/<MusicRecordController>
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -57,8 +57,16 @@ namespace DRMusicREST.Controllers
 
         // PUT api/<MusicRecordController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<MusicRecord> Put(int id, [FromBody] MusicRecord value)
         {
+            var updatedRecord = _musicRecordRepository.Update(id, value);
+            if (updatedRecord == null)
+            {
+                return BadRequest("Failed to update music record.");
+            }
+            return Ok(updatedRecord);
         }
 
         // DELETE api/<MusicRecordController>/5

@@ -1,6 +1,8 @@
+using DRMusicREST.DBContext;
 using DRMusicREST.Interfaces;
 using DRMusicREST.Models;
 using DRMusicREST.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +19,17 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<IRepository<MusicRecord>, MusicRecordRepository>();
-
+//builder.Services.AddSingleton<IRepository<MusicRecord>, MusicRecordRepository>();
+builder.Services.AddScoped<IRepository<MusicRecord>, MusicRecordDbRepo>();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<MusicRecordDbContext>(options =>
+{
+    var connectionString = builder.Configuration["ConnectionStrings:MusicRecordDB"];
+    options.UseSqlServer(connectionString);
+});
 
 var app = builder.Build();
 
