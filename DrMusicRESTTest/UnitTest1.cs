@@ -13,7 +13,7 @@ namespace DrMusicRESTTest
 
         public UnitTest1()
         {
-            _musicRecordsRepo = new MusicRecordRepository(includeSampleData: false);
+            _musicRecordsRepo = new MusicRecordRepository(includeSampleData: true);
             // for db test use dummy table
         }
 
