@@ -29,16 +29,21 @@ namespace DRMusicREST.Repositories
             return obj;
         }
 
-        public MusicRecord Delete(MusicRecord obj)
+        public MusicRecord Delete(int id)
         {
-            throw new NotImplementedException();
+            MusicRecord ToBeDeleted = _musicRecords.FirstOrDefault(x => x.Id == id);
+            if (ToBeDeleted != null)
+            {
+                _musicRecords.Remove(ToBeDeleted);
+            }
+            return ToBeDeleted;
         }
 
         public IEnumerable<MusicRecord> GetAll()
         {
             return _musicRecords;
         }
-
+        
         public MusicRecord GetById(int id)
         {
             throw new NotImplementedException();

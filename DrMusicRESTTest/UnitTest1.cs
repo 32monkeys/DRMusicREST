@@ -13,7 +13,7 @@ namespace DrMusicRESTTest
 
         public UnitTest1()
         {
-            _musicRecordsRepo = new MusicRecordRepository(includeSampleData: false);
+            _musicRecordsRepo = new MusicRecordRepository(includeSampleData: true);
             // for db test use dummy table
         }
 
@@ -57,5 +57,35 @@ namespace DrMusicRESTTest
             // Assert
             Assert.Equal(actual.Count(), expected.Count());
         }
+
+        [Fact]
+        public void AddRecord_InvalidInput_ShouldThrowException()
+        {
+            // Arrange
+            var invalidRecord = new MusicRecord { Title = "", Artist = "Artist 1", Year = 2020, Duration = 60 };
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _musicRecordsRepo.Add(invalidRecord));
+        }
+
+        [Fact]
+        public void DeleteRecord()
+        {
+            // arrange
+            var expeted = new MusicRecord {Id= 0, Title = "Album 1", Artist = "Artist 1", Year = 2020, Duration = 60 };
+
+
+            // act
+            var actuel = _musicRecordsRepo.Delete(0);
+
+            // assert
+            Assert.Equal(expeted, actuel);
+
+
+        }
+
+
+
     }
+
+    
 }

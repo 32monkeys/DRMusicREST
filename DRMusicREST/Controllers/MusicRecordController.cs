@@ -63,8 +63,11 @@ namespace DRMusicREST.Controllers
 
         // DELETE api/<MusicRecordController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<MusicRecord> Delete(int id)
         {
+            return _musicRecordRepository.Delete(id);
         }
     }
 }
