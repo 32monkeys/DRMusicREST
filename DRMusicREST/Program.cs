@@ -27,7 +27,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<MusicRecordDbContext>(options =>
 {
-    var connectionString = builder.Configuration["ConnectionStrings:MusicRecordDB"];
+    var connectionString =
+        builder.Configuration.GetConnectionString("MusicRecordDB")
+        ?? throw new InvalidOperationException(
+            "Connection string 'MusicRecordDB' was not found.");
+
     options.UseSqlServer(connectionString);
 });
 
