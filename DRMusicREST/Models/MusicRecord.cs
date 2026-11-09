@@ -25,5 +25,19 @@ namespace DRMusicREST.Models
         {
             return $"Id: {Id}, Title: {Title}, Artist: {Artist}, Duration: {Duration} seconds, Year: {Year}";
         }
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            MusicRecord other = (MusicRecord)obj;
+            return     Id.Equals(other.Id) 
+                    && Title.Equals(other.Title) 
+                    && Artist.Equals(other.Artist) 
+                    && Duration.Equals(other.Duration) 
+                    && Year.Equals(other.Year) 
+                    ? true : false;
+        }
     }
 }
