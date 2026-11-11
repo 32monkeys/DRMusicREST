@@ -68,10 +68,10 @@ namespace DrMusicRESTTest
 
 
             // act
-            var actuel = _musicRecordsRepo.Delete(0);
+            var actual = _musicRecordsRepo.Delete(0);
 
             // assert
-            Assert.Equal(expected, actuel);
+            Assert.Equal(expected, actual);
 
 
         }
