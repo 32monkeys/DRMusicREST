@@ -13,9 +13,9 @@ namespace DRMusicREST.Repositories
             _musicRecords = new List<MusicRecord>();
             if (includeSampleData)
             {
-                Add(new MusicRecord("Album 1", "Artist 1", 2020, 60));
-                Add(new MusicRecord("Album 2", "Artist 2", 2021, 45));
-                Add(new MusicRecord("Album 3", "Artist 3", 2022, 50));
+                Add(new MusicRecord("Album 1", "Artist 1", 60, 2020));
+                Add(new MusicRecord("Album 2", "Artist 2", 45, 2021));
+                Add(new MusicRecord("Album 3", "Artist 3", 50, 2022));
             }
         }
         public MusicRecord Add(MusicRecord obj)
