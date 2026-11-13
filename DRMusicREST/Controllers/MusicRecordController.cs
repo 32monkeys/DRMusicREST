@@ -4,13 +4,10 @@ using DRMusicREST.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace DRMusicREST.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class MusicRecordController : ControllerBase
     {
         private readonly IRepository<MusicRecord> _musicRecordRepository;
@@ -23,6 +20,7 @@ namespace DRMusicREST.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult<IEnumerable<MusicRecord>> Get()
         {
             IEnumerable<MusicRecord> musicRecords = _musicRecordRepository.GetAll();
@@ -35,15 +33,22 @@ namespace DRMusicREST.Controllers
 
         // GET api/<MusicRecordController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        [Authorize(Roles = "Admin,User")]
+        public ActionResult<MusicRecord> Get(int id)
         {
-            return "value";
+            var musicRecord = _musicRecordRepository.GetById(id);
+            if (musicRecord == null)
+            {
+                return NotFound("Music record not found.");
+            }
+            return Ok(musicRecord);
         }
 
         // POST api/<MusicRecordController>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Admin")]
         public ActionResult Post([FromBody] MusicRecord value)
         {
             try
@@ -61,6 +66,7 @@ namespace DRMusicREST.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Admin")]
         public ActionResult<MusicRecord> Put(int id, [FromBody] MusicRecord value)
         {
             var updatedRecord = _musicRecordRepository.Update(id, value);
@@ -75,6 +81,7 @@ namespace DRMusicREST.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Admin")]
         public ActionResult<MusicRecord> Delete(int id)
         {
             return _musicRecordRepository.Delete(id);

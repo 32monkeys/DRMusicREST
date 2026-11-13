@@ -31,12 +31,14 @@ namespace DRMusicREST.Repositories
 
         public MusicRecord Delete(int id)
         {
+
             MusicRecord ToBeDeleted = _musicRecords.FirstOrDefault(x => x.Id == id);
             if (ToBeDeleted != null)
             {
                 _musicRecords.Remove(ToBeDeleted);
+                return ToBeDeleted;
             }
-            return ToBeDeleted;
+            throw new ArgumentException($"No record found with Id {id}");
         }
 
         public IEnumerable<MusicRecord> GetAll()
@@ -46,12 +48,23 @@ namespace DRMusicREST.Repositories
         
         public MusicRecord GetById(int id)
         {
-            throw new NotImplementedException();
+            return _musicRecords.FirstOrDefault(x => x.Id == id) ?? throw new ArgumentException($"No record found with Id {id}");
         }
 
         public MusicRecord Update(int id, MusicRecord obj)
         {
-            throw new NotImplementedException();
+            MusicRecord existingRecord = _musicRecords.FirstOrDefault(x => x.Id == id);
+            if (existingRecord == null)
+            {
+                throw new ArgumentException($"No record found with Id {id}");
+            }
+
+            existingRecord.Title = obj.Title;
+            existingRecord.Artist = obj.Artist;
+            existingRecord.Year = obj.Year;
+            existingRecord.Duration = obj.Duration;
+
+            return obj;
         }
     }
 }

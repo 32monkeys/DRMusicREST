@@ -10,6 +10,7 @@ namespace DRMusicREST.DBContext
         }
 
         public DbSet<MusicRecord> MusicRecords { get; set; }
-    
+        public DbSet<User> Users { get; set; }
+
     }
 }

@@ -1,12 +1,13 @@
-﻿using DRMusicREST.Interfaces;
+﻿using DRMusicREST.DBContext;
+using DRMusicREST.Interfaces;
 using DRMusicREST.Models;
 
 namespace DRMusicREST.Repositories
 {
     public class MusicRecordDbRepo : IRepository<MusicRecord>
     {
-        private readonly DBContext.MusicRecordDbContext _context;
-        public MusicRecordDbRepo(DBContext.MusicRecordDbContext context)
+        private readonly MusicRecordDbContext _context;
+        public MusicRecordDbRepo(MusicRecordDbContext context)
         {
             _context = context;
         }

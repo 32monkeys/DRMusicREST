@@ -2,9 +2,12 @@ using DRMusicREST.DBContext;
 using DRMusicREST.Interfaces;
 using DRMusicREST.Models;
 using DRMusicREST.Repositories;
-using Microsoft.EntityFrameworkCore;
+using DRMusicREST.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
 
 
@@ -21,25 +24,49 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
 //builder.Services.AddSingleton<IRepository<MusicRecord>, MusicRecordRepository>();
 builder.Services.AddScoped<IRepository<MusicRecord>, MusicRecordDbRepo>();
+builder.Services.AddScoped<AuthService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Music Record API", Version = "v1" });
+
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+
+    opt.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer", doc),
+            new List<string>()
+        }
+    });
+});
 
 builder.Services.AddDbContext<MusicRecordDbContext>(options =>
 {
     var connectionString =
-        builder.Configuration.GetConnectionString("MusicRecordDB")
-        ?? throw new InvalidOperationException(
+        //builder.Configuration.GetConnectionString("MusicRecordDB")
+        //?? throw new InvalidOperationException(
+        //    "Connection string 'MusicRecordDB' was not found.");
+
+        builder.Configuration["ConnectionStrings:MusicRecordDB"] ?? throw new InvalidOperationException(
             "Connection string 'MusicRecordDB' was not found.");
 
     options.UseSqlServer(connectionString);
 });
+
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
@@ -68,10 +95,16 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<MusicRecordDbContext>();
+    DbSeeder.Seed(dbContext);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

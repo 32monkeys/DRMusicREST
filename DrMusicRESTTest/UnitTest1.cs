@@ -61,7 +61,7 @@ namespace DrMusicRESTTest
         //}
 
         [Fact]
-        public void DeleteRecord()
+        public void TestDeleteRecord_ValidInput()
         {
             // arrange
             var expected = new MusicRecord {Id= 0, Title = "Album 1", Artist = "Artist 1", Year = 2020, Duration = 60 };
@@ -76,8 +76,33 @@ namespace DrMusicRESTTest
 
         }
 
+        [Fact]
+        public void TestDeleteRecord_InvalidInput_ShouldThrowException()
+        {
+            // Arrange
+            var invalidId = 999; // Assuming this ID does not exist
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _musicRecordsRepo.Delete(invalidId));
+        }
 
-
+        [Fact]
+        public void TestUpdateRecord_ValidInput()
+        {
+            // Arrange
+            var updatedRecord = new MusicRecord { Id = 1, Title = "Updated Album", Artist = "Updated Artist", Year = 2023, Duration = 70 };
+            // Act
+            var actual = _musicRecordsRepo.Update(updatedRecord.Id, updatedRecord);
+            // Assert
+            Assert.Equal(updatedRecord, actual);
+        }
+        [Fact]
+        public void TestUpdateRecord_InvalidInput_ShouldThrowException()
+        {
+            // Arrange
+            var invalidRecord = new MusicRecord { Id = 999, Title = "Non-existent Album", Artist = "Non-existent Artist", Year = 2023, Duration = 70 };
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => _musicRecordsRepo.Update(invalidRecord.Id,invalidRecord));
+        }
     }
 
     
